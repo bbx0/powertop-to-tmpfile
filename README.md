@@ -2,7 +2,22 @@
 
 Apply [PowerTOP](https://github.com/fenrus75/powertop) recommendations via a tmpfiles.d configuration file.
 
-This is a bash script to convert a `powertop.csv` into [`systemd-tmpfiles` format](https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html), which can be easily edited and applied on boot.
+This is a bash script to convert a `powertop.csv` into the [`systemd-tmpfiles` format](https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html), which can be easily edited and applied on boot.
+
+## Install
+
+Archlinux users can also use the [![AUR package](https://repology.org/badge/version-for-repo/aur/powertop-to-tmpfile.svg)](https://aur.archlinux.org/packages/powertop-to-tmpfile).
+
+```bash
+# The script can run standalone
+curl -sSLO https://raw.githubusercontent.com/bbx0/powertop-to-tmpfile/main/powertop-to-tmpfile
+bash powertop-to-tmpfile --help
+
+# The makefile takes care of a system-wide installation including the man page
+git clone https://github.com/bbx0/powertop-to-tmpfile.git
+sudo make -C powertop-to-tmpfile install
+powertop-to-tmpfile --help
+```
 
 ## Usage
 
@@ -25,9 +40,9 @@ powertop-to-tmpfile --csv powertop.csv |sudo tee -a /etc/tmpfiles.d/powertop.con
 sudo systemd-tmpfiles --create /etc/tmpfiles.d/powertop.conf
 ```
 
-### Automatic mode
+### Automatic workflow
 
-The automatic workflow works similar the powertop `--auto-tune` option and directly activates all recommendations. These are persisted in file `/etc/tmpfiles.d/powertop.conf` and activated on boot.
+The automatic workflow mimics the powertop `--auto-tune` option and directly activates all recommendations. These are persisted in file `/etc/tmpfiles.d/powertop.conf` and activated on boot.
 
 ```bash
 # Example execution of the `powertop-to-tmpfile --auto-tune` command
@@ -51,4 +66,4 @@ All done.
 
 ## Caveat
 
-A `systemd-tmpfile` is not the _correct_ way to apply device configuration. This would be to use `udev` rules or module configuration. That said, generating a tmpfile from the `powertop.csv` is fairly simple and works well for a static device configuration. If you have changing devices or devices only added after boot, you want to use a different mechanism to apply the powerTOP recommendations.
+A `systemd-tmpfile` is not the _“correct”_ way to apply device configuration. This would be to use `udev` rules or module configuration. That said, generating a tmpfile from the `powertop.csv` is fairly simple and works very well for a static device configuration. If you have changing devices or devices only added after boot, you want to use a different mechanism to apply the PowerTOP recommendations.
